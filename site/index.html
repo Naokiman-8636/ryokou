@@ -1,0 +1,401 @@
+<title>岩手・宮城 子連れ宿リスト</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Shippori+Mincho+B1:wght@700&display=swap">
+<style>
+/* Layout: sticky control rail on top, dense scannable rows below; each row expands to a facility sheet. */
+:root{
+  --bg:#f3f5f6; --surface:#ffffff; --sunk:#e8ecee; --line:#d5dcdf;
+  --fg:#1b2428; --muted:#5d6b71; --accent:#1d5a73; --accent-soft:#dbe9ef;
+  --ok:#2f7a4a; --ok-soft:#e0f0e5; --warn:#a86a0c; --warn-soft:#f7ecd6; --no:#9a3b33; --no-soft:#f5e1de;
+  --price:#14313d;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12181b; --surface:#1a2226; --sunk:#222c31; --line:#304047;
+  --fg:#e5ecee; --muted:#9aabb2; --accent:#7cc0db; --accent-soft:#1f3a46;
+  --ok:#7fcf98; --ok-soft:#1c3324; --warn:#e6b45a; --warn-soft:#3a2e17; --no:#ef9a90; --no-soft:#3d2321;
+  --price:#e9f4f8; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12181b; --surface:#1a2226; --sunk:#222c31; --line:#304047;
+  --fg:#e5ecee; --muted:#9aabb2; --accent:#7cc0db; --accent-soft:#1f3a46;
+  --ok:#7fcf98; --ok-soft:#1c3324; --warn:#e6b45a; --warn-soft:#3a2e17; --no:#ef9a90; --no-soft:#3d2321;
+  --price:#e9f4f8; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.6;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{padding-block:28px 12px}
+h1{font-family:var(--f-disp);font-size:clamp(22px,3.2vw,30px);margin:0;letter-spacing:.02em;text-wrap:balance}
+.party{display:inline-flex;gap:6px;align-items:center;margin-top:6px;color:var(--muted);font-size:13px}
+.party b{color:var(--fg)}
+.lede{color:var(--muted);max-width:70ch;margin:8px 0 0;font-size:13px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-block:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:flex-end}
+.fld{display:flex;flex-direction:column;gap:3px;min-width:0}
+.fld>label,.lbl{font-size:11px;color:var(--muted);letter-spacing:.06em}
+select,input[type=date],input[type=search],input[type=number]{font:inherit;font-size:13px;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 8px;min-height:34px;max-width:100%}
+input[type=search]{width:220px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.seg button{font:inherit;font-size:13px;border:0;background:transparent;color:var(--fg);padding:6px 10px;cursor:pointer;min-height:34px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:4px 10px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:700}
+button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.more-filters{margin-top:8px}
+.more-filters summary{cursor:pointer;font-size:12px;color:var(--accent);list-style:none}
+.more-filters summary::-webkit-details-marker{display:none}
+.more-filters[open] summary{margin-bottom:8px}
+.stats{display:flex;flex-wrap:wrap;gap:6px 18px;padding-block:12px;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.stats b{color:var(--fg);font-size:15px}
+.notice{background:var(--warn-soft);color:var(--fg);border-radius:var(--r);padding:10px 12px;font-size:13px;margin-bottom:10px}
+.notice code{background:var(--surface);padding:1px 6px;border-radius:4px;font-size:12px;user-select:all}
+.list{display:flex;flex-direction:column;gap:8px;padding-bottom:40px}
+.h{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:0}
+.h.fav{border-color:var(--accent)}
+.main{padding:12px 14px;min-width:0;display:flex;flex-direction:column;gap:6px}
+.nm{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.nm h2{font-size:15px;margin:0;font-weight:700;line-height:1.4;min-width:0;overflow-wrap:anywhere}
+.tag{font-size:11px;padding:1px 7px;border-radius:4px;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.meta{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.rt{font-variant-numeric:tabular-nums;white-space:nowrap}
+.rt b{color:var(--fg)}
+.feat{display:flex;flex-wrap:wrap;gap:4px}
+.f{font-size:11px;border:1px solid var(--line);border-radius:4px;padding:0 6px;color:var(--fg);white-space:nowrap}
+.f.kid{border-color:var(--ok);color:var(--ok)}
+.price{border-left:1px solid var(--line);padding:12px 14px;display:flex;flex-direction:column;gap:4px;background:var(--sunk);border-radius:0 var(--r) var(--r) 0;min-width:0}
+.amt{font-size:20px;font-weight:700;color:var(--price);font-variant-numeric:tabular-nums;line-height:1.2}
+.amt small{font-size:11px;font-weight:400;color:var(--muted)}
+.st{display:inline-block;font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px;width:fit-content}
+.st.ok{background:var(--ok-soft);color:var(--ok)} .st.few{background:var(--warn-soft);color:var(--warn)} .st.no{background:var(--no-soft);color:var(--no)} .st.na{background:var(--surface);color:var(--muted);border:1px solid var(--line)}
+.plan{font-size:11px;color:var(--muted);overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.links{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px}
+.links a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft)}
+.links a:hover{border-bottom-color:var(--accent)}
+.acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.btn{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:3px 10px;cursor:pointer}
+.btn.on{color:var(--accent);border-color:var(--accent)}
+.sheet{grid-column:1/-1;border-top:1px dashed var(--line);padding:12px 14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 20px;font-size:13px}
+.sheet h3{font-size:11px;letter-spacing:.08em;color:var(--muted);margin:0 0 4px;font-weight:500}
+.sheet p,.sheet ul{margin:0}
+.sheet ul{padding-left:1.1em}
+.rooms{display:grid;grid-template-columns:repeat(5,auto);gap:2px 10px;font-variant-numeric:tabular-nums;width:fit-content}
+.rooms span:nth-child(-n+5){font-size:11px;color:var(--muted)}
+.plans{grid-column:1/-1}
+.ptab{width:100%;border-collapse:collapse;font-size:12px}
+.ptab td,.ptab a{color:var(--accent)}
+.ptab th{border-bottom:1px solid var(--line);padding:4px 6px;text-align:left;vertical-align:top}
+.ptab a{color:var(--accent)}
+.ptab th{font-weight:500;color:var(--muted);font-size:11px}
+.ptab td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tbl{overflow-x:auto}
+.morebtn{display:block;margin:8px auto 40px;font:inherit;border:1px solid var(--accent);color:var(--accent);background:var(--surface);border-radius:6px;padding:8px 20px;cursor:pointer}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:24px;text-align:center;color:var(--muted)}
+footer{color:var(--muted);font-size:12px;padding-block:10px 40px;border-top:1px solid var(--line)}
+footer ul{padding-left:1.2em;margin:6px 0}
+@media (max-width:720px){
+  .h{grid-template-columns:minmax(0,1fr)}
+  .price{border-left:0;border-top:1px solid var(--line);border-radius:0 0 var(--r) var(--r)}
+  input[type=search]{width:100%}
+  .rail{position:static}
+  .fld.grow{flex:1 1 100%}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+
+<header class="top wrap">
+  <h1>岩手・宮城 子連れ宿リスト</h1>
+  <div class="party">1室 <b>大人2名＋3歳児1名</b>・料金は3名分の合計（税込）</div>
+  <p class="lede">じゃらんnetと楽天トラベルに掲載されている岩手県・宮城県の宿を一覧にしています。空室と料金はじゃらんnetの検索結果を取得した時点のものです。そのほかの予約サイトは、各宿のリンクから同じ日付・人数で開けます。</p>
+</header>
+
+<div class="rail">
+ <div class="wrap">
+  <div class="row">
+    <div class="fld"><label for="snap">空室データの日付</label><select id="snap"></select></div>
+    <div class="fld"><span class="lbl">3歳児の扱い</span>
+      <div class="seg" role="group" aria-label="3歳児の扱い">
+        <button type="button" id="m-toddler" aria-pressed="true">幼児として予約</button>
+        <button type="button" id="m-soine" aria-pressed="false">添い寝</button>
+      </div></div>
+    <div class="fld"><label for="pref">県</label><select id="pref"><option value="">岩手・宮城</option><option>岩手県</option><option>宮城県</option></select></div>
+    <div class="fld"><label for="area">エリア</label><select id="area"><option value="">すべて</option></select></div>
+    <div class="fld grow"><label for="q">宿名・温泉名で検索</label><input type="search" id="q" placeholder="例：秋保、花巻、和室"></div>
+    <div class="fld"><label for="sort">並び順</label><select id="sort">
+      <option value="price">料金が安い順</option><option value="rating">評価が高い順</option><option value="reviews">クチコミが多い順</option><option value="kana">名前順</option></select></div>
+  </div>
+  <details class="more-filters" id="mf">
+    <summary>絞り込み条件を開く・閉じる</summary>
+    <div class="row">
+      <div class="chips" id="flags"></div>
+      <div class="fld"><label for="maxp">予算の上限（3名合計）</label><select id="maxp"><option value="">指定なし</option></select></div>
+      <div class="fld"><label for="minr">評価</label><select id="minr"><option value="">指定なし</option><option value="4">4.0以上</option><option value="4.3">4.3以上</option><option value="4.5">4.5以上</option></select></div>
+      <div class="fld"><label for="typ">宿タイプ</label><select id="typ"><option value="">すべて</option></select></div>
+      <div class="fld"><label for="ld">リンク用の日付</label><input type="date" id="ld"></div>
+      <div class="fld"><label for="ln">泊数</label><select id="ln"><option>1</option><option>2</option><option>3</option></select></div>
+    </div>
+  </details>
+ </div>
+</div>
+
+<main class="wrap">
+  <div class="stats" id="stats"></div>
+  <div id="note"></div>
+  <div class="list" id="list"><div class="empty">宿データを読み込んでいます…</div></div>
+  <button type="button" class="morebtn" id="more" hidden>さらに表示</button>
+</main>
+
+<footer class="wrap">
+  <b>データについて</b>
+  <ul>
+    <li>宿の一覧・設備・部屋の構成・お風呂・アメニティ・チェックイン時刻は、じゃらんnetの宿ページから取得しています。楽天トラベルの評価と最安値は楽天トラベルの一覧ページから取得し、宿名で照合しています。</li>
+    <li>「幼児として予約」は、じゃらんnetで大人2名＋幼児（食事・布団あり）1名として検索した結果です。「添い寝」は大人2名で検索した結果で、3歳児の添い寝料金（無料〜数千円）は宿ごとに異なり、現地で精算する場合があります。</li>
+    <li>楽天トラベル・一休・Yahoo!トラベル・Booking.com・Expedia・Agoda・Trip.com・Googleホテルの空室は自動取得できないため、各リンクで確認してください。リンクには選んだ日付と人数が入ります。</li>
+    <li>空室や料金は予約やキャンセルですぐ変わります。予約の前に必ず各サイトで確認してください。</li>
+  </ul>
+  <div id="src"></div>
+</footer>
+
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const yen = n => n == null ? '' : '¥' + n.toLocaleString('ja-JP');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+const S = { hotels: [], idx: [], avail: null, mode: store.get('mode','toddler'), flags: new Set(store.get('flags', [])),
+            favs: new Set(store.get('favs', [])), open: new Set(), shown: 40 };
+
+const FLAGS = [
+  ['avail','空室あり'], ['onsen','温泉'], ['roten','露天風呂'], ['kashi','貸切風呂'], ['washitsu','和室あり'],
+  ['family','4名以上の部屋'], ['park','駐車場無料'], ['fav','お気に入り']
+];
+
+function hasWashitsu(h){ return (h.rooms && (h.rooms['和室'] > 0 || h.rooms['和洋室'] > 0)); }
+function isOnsen(h){ return !!(h.onsen || h.onsenFlag || (h.rfeat||[]).includes('温泉') || /温泉/.test(h.name)); }
+function isRoten(h){ return /^あり/.test(h.rotenburo||'') || (h.rfeat||[]).includes('露天風呂'); }
+function isKashi(h){ return /^あり/.test(h.kashikiri||'') || (h.rfeat||[]).includes('貸切風呂'); }
+function isFamily(h){ return /トリプル|フォース|4ベッド|ファミリー|和洋室|1[0-9]畳|コネクト|スイート/.test((h.roomTypes||[]).join(' ') + (h.roomNote||'')) || (h.rooms && (h.rooms['和室']>0 || h.rooms['和洋室']>0)); }
+function isPark(h){ return /無料/.test(h.parking||'') || (h.rfeat||[]).includes('駐車場'); }
+
+function availFor(h){
+  if (!S.avail) return null;
+  const m = S.avail.modes[S.mode] || {};
+  if (h.jalanId && m[h.jalanId]) return { st: 'ok', ...m[h.jalanId] };
+  if (h.jalanId) return { st: 'no' };
+  return { st: 'na' };
+}
+function restClass(a){
+  if (!a) return 'na';
+  if (a.st !== 'ok') return a.st;
+  const r = (a.plans||[]).map(p=>p.rest||'').join(' ');
+  return /あと|わずか/.test(r) ? 'few' : 'ok';
+}
+
+function linkDate(){
+  const v = $('#ld').value || (S.avail && S.avail.date) || '';
+  return v;
+}
+function addDays(iso, n){ const d = new Date(iso + 'T00:00:00'); d.setDate(d.getDate() + n); return d.toISOString().slice(0,10); }
+function links(h){
+  const d = linkDate(), n = +$('#ln').value || (S.avail && S.avail.nights) || 1;
+  const out = [];
+  const nm = encodeURIComponent(h.name.replace(/[　]/g,' '));
+  if (d){
+    const [y,m,dd] = d.split('-').map(Number); const co = addDays(d, n); const [y2,m2,d2] = co.split('-').map(Number);
+    const tod = S.mode === 'toddler';
+    if (h.jalanId) out.push(['じゃらん', `https://www.jalan.net/yad${h.jalanId}/plan/?screenId=UWW3101&stayYear=${y}&stayMonth=${m}&stayDay=${dd}&stayCount=${n}&roomCount=1&adultNum=2${tod?'&child3Num=1':''}`]);
+    if (h.rakutenNo) out.push(['楽天', `https://hotel.travel.rakuten.co.jp/hotelinfo/plan/${h.rakutenNo}?f_nen1=${y}&f_tuki1=${m}&f_hi1=${dd}&f_nen2=${y2}&f_tuki2=${m2}&f_hi2=${d2}&f_heya_su=1&f_otona_su=2&f_s1=0&f_s2=0&f_y1=${tod?1:0}&f_y2=0&f_y3=0&f_y4=0&f_flg=PLAN`]);
+    out.push(['Booking.com', `https://www.booking.com/searchresults.ja.html?ss=${nm}&checkin=${d}&checkout=${co}&group_adults=2&group_children=1&age=3&no_rooms=1`]);
+    out.push(['Expedia', `https://www.expedia.co.jp/Hotel-Search?destination=${nm}&startDate=${d}&endDate=${co}&adults=2&children=1_3&rooms=1`]);
+    out.push(['Agoda', `https://www.agoda.com/ja-jp/search?textToSearch=${nm}&checkIn=${d}&los=${n}&adults=2&children=1&childages=3&rooms=1`]);
+    out.push(['Trip.com', `https://jp.trip.com/hotels/list?keyword=${nm}&checkin=${d.replace(/-/g,'/')}&checkout=${co.replace(/-/g,'/')}&adult=2&children=1&ages=3&crn=1`]);
+  } else {
+    if (h.jalanId) out.push(['じゃらん', `https://www.jalan.net/yad${h.jalanId}/`]);
+    if (h.rakutenNo) out.push(['楽天', `https://travel.rakuten.co.jp/HOTEL/${h.rakutenNo}/${h.rakutenNo}.html`]);
+  }
+  out.push(['一休', `https://www.google.com/search?q=${nm}+site%3Aikyu.com`]);
+  out.push(['Yahoo!トラベル', `https://www.google.com/search?q=${nm}+site%3Atravel.yahoo.co.jp`]);
+  out.push(['Googleホテル（料金比較）', `https://www.google.com/travel/search?q=${nm}`]);
+  return out;
+}
+
+function feats(h){
+  const f = [];
+  if (h.onsen) f.push(h.onsen.replace(/\(.*\)|（.*）/,''));
+  else if (isOnsen(h)) f.push('温泉');
+  if (h.kakenagashi) f.push('掛け流し');
+  if (isRoten(h)) f.push('露天風呂');
+  if (isKashi(h)) f.push('貸切風呂');
+  if (h.rooms){ if (h.rooms['和室']) f.push(`和室${h.rooms['和室']}`); if (h.rooms['和洋室']) f.push(`和洋室${h.rooms['和洋室']}`); if (h.rooms['洋室']) f.push(`洋室${h.rooms['洋室']}`); }
+  if (isPark(h)) f.push(/無料/.test(h.parking||'') ? '駐車場無料' : '駐車場');
+  const kidish = [(h.facilities||''),(h.services||''),(h.catch||''),(h.rspecial||''),...(h.kidNotes||[])].join(' ');
+  if (/キッズ|子供|子ども|こども|お子様|ファミリー|家族/.test(kidish)) f.push('子連れ向けの記載あり');
+  return f;
+}
+
+function score(h){ return h.jr ?? h.rr ?? null; }
+
+function filtered(){
+  const q = $('#q').value.trim().toLowerCase();
+  const pref = $('#pref').value, area = $('#area').value, typ = $('#typ').value;
+  const maxp = +$('#maxp').value || 0, minr = +$('#minr').value || 0;
+  let L = S.hotels.filter(h => {
+    if (pref && h.pref !== pref) return false;
+    if (area && h.area !== area) return false;
+    if (typ && h.type !== typ) return false;
+    if (q && !(`${h.name} ${h.onsen||''} ${h.city||''} ${h.area||''} ${(h.roomTypes||[]).join(' ')} ${h.address||''}`.toLowerCase().includes(q))) return false;
+    const a = h._a;
+    if (S.flags.has('avail') && !(a && a.st === 'ok')) return false;
+    if (S.flags.has('onsen') && !isOnsen(h)) return false;
+    if (S.flags.has('roten') && !isRoten(h)) return false;
+    if (S.flags.has('kashi') && !isKashi(h)) return false;
+    if (S.flags.has('washitsu') && !hasWashitsu(h)) return false;
+    if (S.flags.has('family') && !isFamily(h)) return false;
+    if (S.flags.has('park') && !isPark(h)) return false;
+    if (S.flags.has('fav') && !S.favs.has(h.id)) return false;
+    if (maxp && !(a && a.st === 'ok' && a.minTotal <= maxp)) return false;
+    if (minr && !((score(h) || 0) >= minr)) return false;
+    return true;
+  });
+  const srt = $('#sort').value;
+  const pv = h => (h._a && h._a.st === 'ok' && h._a.minTotal) ? h._a.minTotal : Infinity;
+  if (srt === 'price') L.sort((a,b) => pv(a) - pv(b) || (score(b)||0) - (score(a)||0));
+  if (srt === 'rating') L.sort((a,b) => (score(b)||0) - (score(a)||0) || ((b.jn||b.rn||0) - (a.jn||a.rn||0)));
+  if (srt === 'reviews') L.sort((a,b) => ((b.jn||0)+(b.rn||0)) - ((a.jn||0)+(a.rn||0)));
+  if (srt === 'kana') L.sort((a,b) => a.name.localeCompare(b.name, 'ja'));
+  return L;
+}
+
+function sheet(h){
+  const a = h._a;
+  const rm = h.rooms ? `<div class="rooms">${['洋室','和室','和洋室','その他','合計'].map(k=>`<span>${k}</span>`).join('')}${['洋室','和室','和洋室','その他','合計'].map(k=>`<span>${h.rooms[k]}室</span>`).join('')}</div>` : '<p>情報なし</p>';
+  const sc = h.scores ? Object.entries(h.scores).map(([k,v])=>`${esc(k)} ${v}`).join('・') : '';
+  const plans = (a && a.st==='ok' && a.plans && a.plans.length) ? `<div class="plans"><h3>この日のプラン例（じゃらんnetの検索結果に出た上位3件。最安値のプランは含まれない場合があります）</h3><div class="tbl"><table class="ptab"><tr><th>プラン</th><th>部屋</th><th>食事</th><th>残室</th><th style="text-align:right">3名合計</th></tr>${a.plans.map(p=>`<tr><td>${p.url?`<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.plan)}</a>`:esc(p.plan)}</td><td>${esc(p.room||'')}</td><td>${esc(p.meal||'')}</td><td>${esc(p.rest||'')}</td><td class="n">${yen(p.total)}</td></tr>`).join('')}</table></div></div>` : '';
+  const blk = (t, v) => v ? `<div><h3>${t}</h3><p>${esc(v)}</p></div>` : '';
+  return `<div class="sheet">
+    ${plans}
+    <div><h3>部屋数</h3>${rm}${h.roomNote?`<p style="margin-top:4px">${esc(h.roomNote)}</p>`:''}</div>
+    ${(h.roomTypes&&h.roomTypes.length)?`<div><h3>主な部屋タイプ</h3><ul>${h.roomTypes.map(r=>`<li>${esc(r)}</li>`).join('')}</ul></div>`:''}
+    ${(h.kidNotes&&h.kidNotes.length)?`<div><h3>子連れに関する記載（宿ページより）</h3><ul>${h.kidNotes.map(k=>`<li>${esc(k)}</li>`).join('')}</ul></div>`:''}
+    ${blk('部屋の設備', h.roomEquip)}
+    ${blk('お風呂', [h.onsen, h.baths, h.rotenburo && ('露天風呂 '+h.rotenburo), h.kashikiri && ('貸切風呂 '+h.kashikiri)].filter(Boolean).join(' / '))}
+    ${(h.amenities&&h.amenities.length)?`<div><h3>アメニティ</h3><p>${h.amenities.map(esc).join('・')}</p></div>`:''}
+    ${blk('館内施設', h.facilities)}
+    ${blk('サービス・レジャー', h.services)}
+    ${blk('チェックイン / アウト', (h.checkin||h.checkout) ? `${h.checkin||'?'} / ${h.checkout||'?'}` : '')}
+    ${blk('Wi-Fi', h.wifi)}
+    ${blk('駐車場', h.parking)}
+    ${blk('アクセス', h.access)}
+    ${blk('住所', h.address)}
+    ${blk('項目別の評価（じゃらんnet）', sc)}
+    ${blk('宿の紹介', h.catch || h.rspecial)}
+    ${(h.rfeat&&h.rfeat.length)?`<div><h3>楽天トラベルの設備タグ</h3><p>${h.rfeat.map(esc).join('・')}</p></div>`:''}
+    ${blk('楽天トラベルの最安値（日付指定なし・1名あたり目安）', h.rmin ? yen(h.rmin)+'〜' : '')}
+  </div>`;
+}
+
+function card(h){
+  const a = h._a, rc = restClass(a), fav = S.favs.has(h.id), open = S.open.has(h.id);
+  let priceHtml;
+  if (!S.avail) priceHtml = `<span class="st na">空室データ未取得</span>`;
+  else if (a.st === 'ok'){
+    const p = (a.plans||[]).slice().sort((x,y)=>x.total-y.total)[0];
+    priceHtml = `<span class="st ${rc}">${rc==='few'?'残りわずか':'空室あり'}</span>
+      <div class="amt">${yen(a.minTotal)}<small>〜 / ${S.avail.nights}泊・3名</small></div>
+      ${p?`<div class="plan">${p.total===a.minTotal?'':`食事付きなどのプラン例 ${yen(p.total)}：`}${esc([p.room,p.meal].filter(Boolean).join('・'))}${p.rest?'・'+esc(p.rest):''}<br>${esc(p.plan)}</div>`:''}`;
+  } else if (a.st === 'no') priceHtml = `<span class="st no">${S.mode==='toddler'?'この条件の空室なし':'空室なし'}</span><div class="plan">じゃらんnetで${S.mode==='toddler'?'幼児1名を含む':'大人2名の'}空室が見つかりませんでした${S.mode==='toddler'?'。「添い寝」に切り替えると見つかる場合があります':''}</div>`;
+  else priceHtml = `<span class="st na">じゃらん未掲載</span><div class="plan">楽天トラベルなどのリンクで確認してください${h.rmin?`<br>楽天最安値 ${yen(h.rmin)}〜（1名・日付指定なし）`:''}</div>`;
+  const rt = [h.jr!=null?`<span class="rt">じゃらん <b>${h.jr}</b>（${(h.jn||0).toLocaleString()}件）</span>`:'', h.rr!=null?`<span class="rt">楽天 <b>${h.rr}</b>（${(h.rn||0).toLocaleString()}件）</span>`:''].join('');
+  return `<article class="h${fav?' fav':''}" data-id="${h.id}">
+    <div class="main">
+      <div class="nm"><h2>${esc(h.name)}</h2>${h.type?`<span class="tag">${esc(h.type)}</span>`:''}<span class="tag">${esc(h.pref.replace('県',''))}・${esc(h.area||'')}</span></div>
+      <div class="meta">${rt}${h.checkin?`<span>IN ${esc(h.checkin.replace('～',''))} / OUT ${esc(h.checkout?h.checkout.replace('～',''):'?')}</span>`:''}</div>
+      <div class="feat">${feats(h).map(x=>`<span class="f${x.startsWith('子連れ')?' kid':''}">${esc(x)}</span>`).join('')}</div>
+      <div class="links">${links(h).map(([t,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>`).join('')}</div>
+      <div class="acts"><button type="button" class="btn${open?' on':''}" data-act="open" aria-expanded="${open}">${open?'詳細を閉じる':'設備・部屋の詳細'}</button>
+        <button type="button" class="btn${fav?' on':''}" data-act="fav" aria-pressed="${fav}">${fav?'★ お気に入り':'☆ お気に入り'}</button></div>
+    </div>
+    <div class="price">${priceHtml}</div>
+    ${open?sheet(h):''}
+  </article>`;
+}
+
+function render(){
+  S.hotels.forEach(h => h._a = availFor(h));
+  const L = filtered();
+  const av = S.hotels.filter(h => h._a && h._a.st === 'ok');
+  const minAll = av.length ? Math.min(...av.map(h=>h._a.minTotal||Infinity)) : null;
+  $('#stats').innerHTML = `<span>掲載 <b>${S.hotels.length.toLocaleString()}</b> 軒</span>` +
+    (S.avail ? `<span>${S.avail.date}（${S.avail.nights}泊）に空室あり <b>${av.length}</b> 軒</span><span>最安 <b>${yen(minAll)}</b></span>` : '') +
+    `<span>条件に合う宿 <b>${L.length.toLocaleString()}</b> 軒</span>`;
+  const list = $('#list');
+  if (!L.length){ list.innerHTML = `<div class="empty">条件に合う宿がありません。絞り込み条件を減らしてください。</div>`; $('#more').hidden = true; return; }
+  list.innerHTML = L.slice(0, S.shown).map(card).join('');
+  $('#more').hidden = L.length <= S.shown;
+  $('#more').textContent = `さらに表示（残り ${(L.length - S.shown).toLocaleString()} 軒）`;
+}
+
+function noteFor(){
+  const ld = $('#ld').value;
+  const n = $('#note');
+  if (ld && S.avail && ld !== S.avail.date){
+    n.innerHTML = `<div class="notice">リンクは <b>${ld}</b> で開きますが、料金と空室は <b>${S.avail.date}</b> のデータです。${ld} の空室を一覧に反映するには、Claudeに <code>${ld}で空室を更新して</code> と伝えてください。</div>`;
+  } else n.innerHTML = '';
+}
+
+function setMode(m){ S.mode = m; store.set('mode', m);
+  $('#m-toddler').setAttribute('aria-pressed', m==='toddler'); $('#m-soine').setAttribute('aria-pressed', m==='soine'); S.shown = 40; render(); }
+
+async function loadAvail(date){
+  if (!date){ S.avail = null; render(); return; }
+  try { const r = await fetch(`avail/${date}.json`); S.avail = await r.json(); }
+  catch { S.avail = null; }
+  if (!$('#ld').value || !S.idx.some(x=>x.date===$('#ld').value)) $('#ld').value = S.avail ? S.avail.date : '';
+  $('#ln').value = String(S.avail ? S.avail.nights : 1);
+  $('#src').textContent = S.avail ? `空室データ取得日時：${S.avail.fetchedAt.replace('T',' ').slice(0,16)}（じゃらんnet）` : '';
+  store.set('snap', date); noteFor(); S.shown = 40; render();
+}
+
+async function init(){
+  $('#flags').innerHTML = FLAGS.map(([k,t]) => `<button type="button" class="chip" data-flag="${k}" aria-pressed="${S.flags.has(k)}">${t}</button>`).join('');
+  [20000,30000,40000,50000,60000,80000,100000].forEach(v => $('#maxp').insertAdjacentHTML('beforeend', `<option value="${v}">${yen(v)}まで</option>`));
+  try {
+    const [h, idx] = await Promise.all([fetch('hotels.json').then(r=>r.json()), fetch('avail/index.json').then(r=>r.json()).catch(()=>[])]);
+    S.hotels = h; S.idx = idx.sort((a,b)=>a.date.localeCompare(b.date));
+  } catch(e) { $('#list').innerHTML = `<div class="empty">宿データを読み込めませんでした。ページを再読み込みしてください。</div>`; return; }
+  const areas = {}; S.hotels.forEach(h => { if (h.area) (areas[h.pref] ||= new Set()).add(h.area); });
+  const order = ['岩手県','宮城県'];
+  $('#area').innerHTML = '<option value="">すべて</option>' + order.map(p => `<optgroup label="${p}">${[...(areas[p]||[])].sort((a,b)=>a==='その他'?1:b==='その他'?-1:a.localeCompare(b,'ja')).map(a=>`<option>${a}</option>`).join('')}</optgroup>`).join('');
+  const types = [...new Set(S.hotels.map(h=>h.type).filter(Boolean))].sort();
+  $('#typ').innerHTML = '<option value="">すべて</option>' + types.map(t=>`<option>${esc(t)}</option>`).join('');
+  $('#snap').innerHTML = S.idx.length ? S.idx.map(x=>`<option value="${x.date}">${x.date}（${x.nights}泊）</option>`).join('') : '<option value="">未取得</option>';
+  const saved = store.get('snap', null);
+  const pick = S.idx.find(x=>x.date===saved) ? saved : (S.idx[0] && S.idx[0].date);
+  if (pick) $('#snap').value = pick;
+  setMode(S.mode === 'soine' ? 'soine' : 'toddler');
+  await loadAvail(pick);
+}
+
+$('#m-toddler').onclick = () => setMode('toddler');
+$('#m-soine').onclick = () => setMode('soine');
+$('#snap').onchange = e => { $('#ld').value = e.target.value; loadAvail(e.target.value); };
+['#pref','#area','#sort','#maxp','#minr','#typ'].forEach(s => $(s).addEventListener('change', () => { if (s==='#pref') $('#area').value=''; S.shown = 40; render(); }));
+$('#q').addEventListener('input', () => { S.shown = 40; render(); });
+$('#ld').addEventListener('change', () => { noteFor(); render(); });
+$('#ln').addEventListener('change', render);
+$('#flags').addEventListener('click', e => { const b = e.target.closest('[data-flag]'); if (!b) return; const k = b.dataset.flag;
+  S.flags.has(k) ? S.flags.delete(k) : S.flags.add(k); b.setAttribute('aria-pressed', S.flags.has(k)); store.set('flags', [...S.flags]); S.shown = 40; render(); });
+$('#more').onclick = () => { S.shown += 40; render(); };
+$('#list').addEventListener('click', e => { const b = e.target.closest('[data-act]'); if (!b) return; const id = b.closest('[data-id]').dataset.id;
+  if (b.dataset.act === 'open') S.open.has(id) ? S.open.delete(id) : S.open.add(id);
+  if (b.dataset.act === 'fav'){ S.favs.has(id) ? S.favs.delete(id) : S.favs.add(id); store.set('favs', [...S.favs]); }
+  render(); });
+init();
+})();
+</script>
